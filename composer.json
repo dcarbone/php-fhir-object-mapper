@@ -1,0 +1,39 @@
+{
+    "name": "php-fhir/object-mapper",
+    "description": "Mapper library to create maps of FHIR Objects and their properties.",
+    "type": "library",
+    "license": "Apache-2.0",
+    "keywords": [
+        "php",
+        "fhir",
+        "ehr",
+        "hl7",
+        "php-fhir"
+    ],
+    "homepage": "https://github.com/dcarbone/php-fhir-object-mapper.git",
+    "authors": [
+        {
+            "name": "Daniel Carbone",
+            "email": "daniel.p.carbone@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/console": "2.6.*",
+        "symfony/finder": "2.6.*",
+        "php-fhir/utilities": "1.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.6.*",
+        "php-fhir/elements": "*",
+        "php-fhir/resources": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "FHIR\\ObjectMapper\\": "src/"
+        }
+    },
+    "bin": [
+        "bin/fhir-object-mapper"
+    ]
+}
