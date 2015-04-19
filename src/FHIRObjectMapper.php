@@ -83,10 +83,6 @@ class FHIRObjectMapper
             $className = str_replace('.php', '', $classFile->getFilename());
             $this->classNamespaceMap[$className] = $this->resourceClassNamespace.$className;
         }
-
-
-//        file_put_contents($this->outputDir.'classNamespaceMap.php',
-//            "<?php\n\n return ".ReflectionUtils::prettyVarExport($this->classNamespaceMap));
     }
 
     /**
@@ -157,7 +153,7 @@ class {$this->outputClassName} implements \ArrayAccess {
         if (isset(\$this->_classMap[\$offset]))
             return \$this->_classMap[\$offset];
 
-        throw new \OutOfRangeException('No FHIR class named "\$offset\" exists in this map.');
+        throw new \OutOfRangeException('No FHIR class named "'.\$offset.'" exists in this map.');
     }
 }
 PHP;
