@@ -1,13 +1,11 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: carbond2
- * Date: 4/18/2015
- * Time: 11:34 AM
- */
 
+/**
+ * Class FHIRObjectMapperTest
+ */
 class FHIRObjectMapperTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var string */
     private $_outputDir;
 
     /**
