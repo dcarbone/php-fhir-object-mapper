@@ -91,6 +91,8 @@ class FHIRObjectMapper
 
     /**
      * Create property -> class(es) map for FHIR classes
+     *
+     * TODO: Clean this method up a bit.
      */
     public function generatePropertyMapClass()
     {
@@ -99,7 +101,12 @@ class FHIRObjectMapper
         foreach($this->elementClassFinder as $classFile)
         {
             /** @var \Symfony\Component\Finder\SplFileInfo $classFile */
-            $namespacedClassName = $this->elementClassNamespace.str_replace(array('\\', 'src/', '/', '.php'), array('/', '', '\\', ''), $classFile->getRelativePathname());
+            $className = str_replace(array('\\', 'src/', '/', '.php'), array('/', '', '\\', ''), $classFile->getRelativePathname());
+
+            if (false !== strpos($className, 'Abstract') || false !== strpos($className, 'Interface'))
+                continue;
+
+            $namespacedClassName = $this->elementClassNamespace.$className;
             $reflectionClass = new \ReflectionClass($namespacedClassName);
             $classMap[$namespacedClassName] = $this->createMapEntry($reflectionClass);
         }
@@ -107,14 +114,19 @@ class FHIRObjectMapper
         foreach($this->resourceClassFinder as $classFile)
         {
             /** @var \Symfony\Component\Finder\SplFileInfo $classFile */
-            $namespacedClassName = $this->resourceClassNamespace.str_replace(array('\\', 'src/', '/', '.php'), array('/', '', '\\', ''), $classFile->getRelativePathname());
+            $className = str_replace(array('\\', 'src/', '/', '.php'), array('/', '', '\\', ''), $classFile->getRelativePathname());
+
+            if (false !== strpos($className, 'Abstract') || false !== strpos($className, 'Interface'))
+                continue;
+
+            $namespacedClassName = $this->resourceClassNamespace.$className;
             $reflectionClass = new \ReflectionClass($namespacedClassName);
             $classMap[$namespacedClassName] = $this->createMapEntry($reflectionClass);
         }
 
         $outputFile = $this->outputDir.$this->outputClassName.'.php';
 
-        $data = ReflectionUtils::prettyVarExport($classMap);
+        $data = str_replace("\n  ", "\n        ", ReflectionUtils::prettyVarExport($classMap));
         $now = date('Y-m-d e');
         $outputString = <<<PHP
 <?php
@@ -148,7 +160,6 @@ class {$this->outputClassName} implements \ArrayAccess {
         throw new \OutOfRangeException('No FHIR class named "\$offset\" exists in this map.');
     }
 }
-
 PHP;
         return (bool)file_put_contents($outputFile, $outputString);
     }
