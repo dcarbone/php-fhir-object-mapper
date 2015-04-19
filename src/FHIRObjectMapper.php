@@ -173,29 +173,39 @@ PHP;
 
         foreach($reflectionClass->getProperties() as $property)
         {
+            $scalarTypes = array('string', 'bool', 'boolean', 'int', 'integer', 'float', 'double', 'mixed', 'null');
             $propertyName = $property->getName();
             $propertyClasses = ReflectionUtils::getClassesFromPropertyDocBlock($property, true);
 
-            $map[$propertyName] = array_filter(array_map(function($class) use ($_classNamespaceMap) {
+            $map[$propertyName] = array_filter(array_map(function($class) use ($_classNamespaceMap, $scalarTypes) {
                 if (false !== strpos($class, 'Collection'))
                     return null;
 
-                if (in_array($class, array('string', 'bool', 'boolean', 'int', 'integer', 'float', 'double', 'mixed', 'null')))
-                    return $class;
+                $isCollection = false;
 
                 if (false !== strpos($class, '\\'))
                 {
                     $exp = explode('\\', $class);
                     $class = end($exp);
                 }
-
                 if (false !== strpos($class, '[]'))
+                {
                     $class = str_replace('[]', '', $class);
+                    $isCollection = true;
+                }
 
-                if (isset($_classNamespaceMap[$class]))
-                    return $_classNamespaceMap[$class];
+                if (!in_array($class, $scalarTypes))
+                {
+                    if (isset($_classNamespaceMap[$class]))
+                        $class = $_classNamespaceMap[$class];
+                    else
+                        throw new \RuntimeException('Could not locate full namespace for class "'.$class.'".');
+                }
 
-                throw new \RuntimeException('Could not locate full namespace for class "'.$class.'".');
+                if ($isCollection)
+                    return array($class);
+
+                return $class;
             }, $propertyClasses));
         }
 
