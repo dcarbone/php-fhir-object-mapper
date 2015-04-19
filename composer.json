@@ -32,8 +32,5 @@
         "psr-4": {
             "FHIR\\ObjectMapper\\": "src/"
         }
-    },
-    "bin": [
-        "bin/fhir-object-mapper"
-    ]
+    }
 }
