@@ -1,2 +1,3 @@
-# php-fhir-object-mapper
-Library to generate object property maps for PHP FHIR components
+# No longer maintained
+
+This library will no longer be maintained in favor of [PHPFHIR](https://github.com/dcarbone/php-fhir)
