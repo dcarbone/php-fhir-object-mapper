@@ -122,7 +122,7 @@ class FHIRObjectMapper
 
         $outputFile = $this->outputDir.$this->outputClassName.'.php';
 
-        $data = str_replace("\n  ", "\n        ", ReflectionUtils::prettyVarExport($classMap));
+        $data = str_replace("\n  ", "\n        ", var_export($classMap, true));
         $now = date('Y-m-d e');
         $outputString = <<<PHP
 <?php
@@ -132,7 +132,7 @@ class FHIRObjectMapper
  *
  * Created: {$now}
  */
-class {$this->outputClassName} implements \ArrayAccess {
+class {$this->outputClassName} implements \\ArrayAccess {
 
     /** @var array */
     private \$_classMap = {$data};
